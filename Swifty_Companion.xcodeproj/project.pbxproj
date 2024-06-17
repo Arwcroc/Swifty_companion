@@ -8,12 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		69026E0A2BFCC9DD00A922E0 /* Swifty_CompanionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69026E092BFCC9DD00A922E0 /* Swifty_CompanionApp.swift */; };
-		69026E0C2BFCC9DD00A922E0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69026E0B2BFCC9DD00A922E0 /* ContentView.swift */; };
+		69026E0C2BFCC9DD00A922E0 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69026E0B2BFCC9DD00A922E0 /* HomeView.swift */; };
 		69026E0E2BFCC9E000A922E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69026E0D2BFCC9E000A922E0 /* Assets.xcassets */; };
 		69026E112BFCC9E000A922E0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69026E102BFCC9E000A922E0 /* Preview Assets.xcassets */; };
 		69026E1B2BFCC9E100A922E0 /* Swifty_CompanionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69026E1A2BFCC9E100A922E0 /* Swifty_CompanionTests.swift */; };
 		69026E252BFCC9E100A922E0 /* Swifty_CompanionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69026E242BFCC9E100A922E0 /* Swifty_CompanionUITests.swift */; };
 		69026E272BFCC9E100A922E0 /* Swifty_CompanionUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69026E262BFCC9E100A922E0 /* Swifty_CompanionUITestsLaunchTests.swift */; };
+		69026E342BFCDC3B00A922E0 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69026E332BFCDC3B00A922E0 /* SearchView.swift */; };
+		69026E372BFCDC8400A922E0 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69026E362BFCDC8400A922E0 /* User.swift */; };
+		69026E392BFCDDFA00A922E0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69026E382BFCDDFA00A922E0 /* ContentView.swift */; };
+		69C321402C073DC5006FF884 /* ProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C3213F2C073DC4006FF884 /* ProjectsView.swift */; };
+		69C321422C073DD1006FF884 /* SkillsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C321412C073DD1006FF884 /* SkillsView.swift */; };
+		69E3EADA2BFE2DB000640935 /* OAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E3EAD92BFE2DB000640935 /* OAuth.swift */; };
+		69EB8A5A2BFF9C4400F2EFC3 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 69EB8A592BFF9C4400F2EFC3 /* SwiftyJSON */; };
+		69EB8A5C2C008B9D00F2EFC3 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EB8A5B2C008B9D00F2EFC3 /* ProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +44,7 @@
 /* Begin PBXFileReference section */
 		69026E062BFCC9DD00A922E0 /* Swifty_Companion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swifty_Companion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69026E092BFCC9DD00A922E0 /* Swifty_CompanionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swifty_CompanionApp.swift; sourceTree = "<group>"; };
-		69026E0B2BFCC9DD00A922E0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		69026E0B2BFCC9DD00A922E0 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		69026E0D2BFCC9E000A922E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		69026E102BFCC9E000A922E0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		69026E162BFCC9E100A922E0 /* Swifty_CompanionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Swifty_CompanionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,6 +52,14 @@
 		69026E202BFCC9E100A922E0 /* Swifty_CompanionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Swifty_CompanionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69026E242BFCC9E100A922E0 /* Swifty_CompanionUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swifty_CompanionUITests.swift; sourceTree = "<group>"; };
 		69026E262BFCC9E100A922E0 /* Swifty_CompanionUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swifty_CompanionUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		69026E332BFCDC3B00A922E0 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		69026E362BFCDC8400A922E0 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		69026E382BFCDDFA00A922E0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; tabWidth = 4; usesTabs = 1; };
+		69C3213F2C073DC4006FF884 /* ProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectsView.swift; sourceTree = "<group>"; };
+		69C321412C073DD1006FF884 /* SkillsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillsView.swift; sourceTree = "<group>"; };
+		69E3EAD92BFE2DB000640935 /* OAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth.swift; sourceTree = "<group>"; };
+		69EB8A572BFF99E600F2EFC3 /* .env.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = .env.md; sourceTree = "<group>"; };
+		69EB8A5B2C008B9D00F2EFC3 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69EB8A5A2BFF9C4400F2EFC3 /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +95,7 @@
 				69026E192BFCC9E100A922E0 /* Swifty_CompanionTests */,
 				69026E232BFCC9E100A922E0 /* Swifty_CompanionUITests */,
 				69026E072BFCC9DD00A922E0 /* Products */,
+				69E3EADD2BFE3F7500640935 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -94,9 +112,11 @@
 		69026E082BFCC9DD00A922E0 /* Swifty_Companion */ = {
 			isa = PBXGroup;
 			children = (
+				69E3EADB2BFE2DBD00640935 /* View */,
+				69E3EAD82BFE2D9800640935 /* Service */,
 				69026E092BFCC9DD00A922E0 /* Swifty_CompanionApp.swift */,
-				69026E0B2BFCC9DD00A922E0 /* ContentView.swift */,
 				69026E0D2BFCC9E000A922E0 /* Assets.xcassets */,
+				69026E352BFCDC6D00A922E0 /* Models */,
 				69026E0F2BFCC9E000A922E0 /* Preview Content */,
 			);
 			path = Swifty_Companion;
@@ -127,6 +147,43 @@
 			path = Swifty_CompanionUITests;
 			sourceTree = "<group>";
 		};
+		69026E352BFCDC6D00A922E0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				69026E362BFCDC8400A922E0 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		69E3EAD82BFE2D9800640935 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				69E3EAD92BFE2DB000640935 /* OAuth.swift */,
+				69EB8A572BFF99E600F2EFC3 /* .env.md */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		69E3EADB2BFE2DBD00640935 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				69026E0B2BFCC9DD00A922E0 /* HomeView.swift */,
+				69026E332BFCDC3B00A922E0 /* SearchView.swift */,
+				69026E382BFCDDFA00A922E0 /* ContentView.swift */,
+				69EB8A5B2C008B9D00F2EFC3 /* ProfileView.swift */,
+				69C3213F2C073DC4006FF884 /* ProjectsView.swift */,
+				69C321412C073DD1006FF884 /* SkillsView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		69E3EADD2BFE3F7500640935 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -143,6 +200,9 @@
 			dependencies = (
 			);
 			name = Swifty_Companion;
+			packageProductDependencies = (
+				69EB8A592BFF9C4400F2EFC3 /* SwiftyJSON */,
+			);
 			productName = Swifty_Companion;
 			productReference = 69026E062BFCC9DD00A922E0 /* Swifty_Companion.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +275,11 @@
 				Base,
 			);
 			mainGroup = 69026DFD2BFCC9DD00A922E0;
+			packageReferences = (
+				69E3EADC2BFE3DD300640935 /* XCRemoteSwiftPackageReference "OAuthSwift" */,
+				69EB8A542BFF85AD00F2EFC3 /* XCRemoteSwiftPackageReference "OAuth2" */,
+				69EB8A582BFF9C3A00F2EFC3 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+			);
 			productRefGroup = 69026E072BFCC9DD00A922E0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -257,7 +322,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				69026E0C2BFCC9DD00A922E0 /* ContentView.swift in Sources */,
+				69026E372BFCDC8400A922E0 /* User.swift in Sources */,
+				69026E392BFCDDFA00A922E0 /* ContentView.swift in Sources */,
+				69C321402C073DC5006FF884 /* ProjectsView.swift in Sources */,
+				69C321422C073DD1006FF884 /* SkillsView.swift in Sources */,
+				69026E0C2BFCC9DD00A922E0 /* HomeView.swift in Sources */,
+				69E3EADA2BFE2DB000640935 /* OAuth.swift in Sources */,
+				69026E342BFCDC3B00A922E0 /* SearchView.swift in Sources */,
+				69EB8A5C2C008B9D00F2EFC3 /* ProfileView.swift in Sources */,
 				69026E0A2BFCC9DD00A922E0 /* Swifty_CompanionApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -422,6 +494,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Swifty_Companion/Preview Content\"";
+				DEVELOPMENT_TEAM = XJ86NZS2JN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -450,6 +523,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Swifty_Companion/Preview Content\"";
+				DEVELOPMENT_TEAM = XJ86NZS2JN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -582,6 +656,41 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		69E3EADC2BFE3DD300640935 /* XCRemoteSwiftPackageReference "OAuthSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/OAuthSwift/OAuthSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.0;
+			};
+		};
+		69EB8A542BFF85AD00F2EFC3 /* XCRemoteSwiftPackageReference "OAuth2" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/p2/OAuth2";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.3.5;
+			};
+		};
+		69EB8A582BFF9C3A00F2EFC3 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		69EB8A592BFF9C4400F2EFC3 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 69EB8A582BFF9C3A00F2EFC3 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 69026DFE2BFCC9DD00A922E0 /* Project object */;
 }
