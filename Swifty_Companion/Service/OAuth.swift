@@ -5,165 +5,275 @@
 //  Created by Téo Froissart on 22/05/2024.
 //
 
-//import Foundation
-//import OAuth2
-//
-//
-//func getUID() -> String {
-//    if let _UID = ProcessInfo.processInfo.environment["API_UID"] {
-//        return String(_UID)
-//    } else {
-//        return ("Missing environment variable: API_UID")
-//    }
-//}
-//
-//
-//func getSecret() -> String {
-//    if let _secret = ProcessInfo.processInfo.environment["API_SECRET"] {
-//        return String(_secret)
-//    } else {
-//        return ("Missing environment variable: API_SECRET")
-//    }
-//}
-//
-//
-//class API42Class {
-//    var oAuth2Client: OAuth2ClientCredentials
-//    init() {
-//        self.oAuth2Client = OAuth2ClientCredentials(settings: [
-//            "client_id": getUID(),
-//            "client_secret": getSecret(),
-//            "authorize_uri": "https://github.com/login/oauth/authorize",
-//            "token_uri": "https://github.com/login/oauth/access_token",   // code grant only
-//            "redirect_uris": ["ftintra://oauth/callback"],   // register your own "myapp" scheme in Info.plist
-////            "scope": "user repo:status",
-////            "secret_in_body": true,    // Github needs this
-////            "keychain": false,         // if you DON'T want keychain integration
-//        ] as OAuth2JSON)
-//    }
-//    
-//    func    getToken() {
-//            let tokenUrl = URL(string: "https://api.intra.42.fr/oauth/token/info")!
-//            let req = oAuth2Client.request(forURL: tokenUrl)
-//            perform(request: req) { response in
-//                do {
-//                    let dict = try response.responseJSON()
-//                    dump(dict)
-//                }
-//                catch let error {
-//                    print(error)
-//                }
-//            }
-//        }
-//}
+import Foundation
 
-//
-//import Foundation
-//import OAuth2
-//
-//
-//func getUID() -> String {
-//    if let _UID = ProcessInfo.processInfo.environment["API_UID"] {
-//        return String(_UID)
-//    } else {
-//        return ("Missing environment variable: API_UID")
-//    }
-//}
-//
-//
-//func getSecret() -> String {
-//    if let _secret = ProcessInfo.processInfo.environment["API_SECRET"] {
-//        return String(_secret)
-//    } else {
-//        return ("Missing environment variable: API_SECRET")
-//    }
-//}
-//
-//
-//class API42Class {
-//    var oAuth2Client: OAuth2CodeGrant
-//    init() {
-//        self.oAuth2Client = OAuth2CodeGrant(settings: [
-//            "client_id": getUID(),
-//            "client_secret": getSecret(),
-//            "authorize_uri": "https://github.com/login/oauth/authorize",
-//            "token_uri": "https://github.com/login/oauth/access_token",   // code grant only
-//            "redirect_uris": ["ftintra://oauth/callback"],   // register your own "myapp" scheme in Info.plist
-////            "scope": "user repo:status",
-////            "secret_in_body": true,    // Github needs this
-////            "keychain": false,         // if you DON'T want keychain integration
-//        ] as OAuth2JSON)
-//    }
-//}
-//
+class OAuth {
+    static let shared = OAuth()
+    private var _onLogout: () -> Void = {}
+    
+    enum ApiError: Error {
+        case getToken
+        case noCode
+        case invalidToken
+        case invalidUrl
+        case requestFailed
+        case invalidResponse
+        case invalidState
+        case notFound
+        case tooManyRequests
+        case unhandledError(any Error)
+    }
+    
+    private struct OAuthConfig {
+        static var consumerKey: String {
+            return APIConfig.shared.getFromConfig(key: APIConfig.Keys.API_KEY)
+        }
+        
+        static var consumerSecret: String {
+            return APIConfig.shared.getFromConfig(key: APIConfig.Keys.API_SECRET)
+        }
+        
+        static let apiPrefix = "https://api.intra.42.fr"
+        static let authorizeUrl = "\(apiPrefix)/oauth/authorize"
+        static let accessTokenUrl = "\(apiPrefix)/oauth/token"
+        static let callbackUrl = "ftintra://oauth/callback"
+    }
+    
+    init() {}
+    
+    func authorizeUrl() throws -> URL? {
+        let state = try APIKeychain.shared.generate(key: "oauth_state", length: 64)
+        print("generated state:", state)
+        
+        var urlBuilder = URLComponents(string: OAuthConfig.authorizeUrl)
+        let parameters = [
+            "client_id": OAuthConfig.consumerKey,
+            "redirect_uri": OAuthConfig.callbackUrl,
+            "scope": "public",
+            "state": state,
+            "response_type": "code"
+        ]
+        
+        urlBuilder?.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
+        return urlBuilder?.url
+    }
+    
+    func onLogout(_ f: @escaping () -> Void) {
+        self._onLogout = f
+    }
+    
+    func logout() throws {
+        try APIKeychain.shared.delete(key: "authorization_code")
+        try APIKeychain.shared.delete(key: "oauth_state")
+        try APIKeychain.shared.delete(key: "access_token")
+        self._onLogout()
+    }
+    
+    func getToken() throws -> Token {
+            let tokenString = try APIKeychain.shared.load(key: "access_token")
 
+            guard !tokenString.isEmpty,
+                let tokenData = tokenString.data(using: .utf8),
+                let token = try? JSONDecoder().decode(Token.self, from: tokenData)
+            else {
+                throw ApiError.invalidToken
+            }
+            
+            guard token.expiresAt >= Date() else {
+                try APIKeychain.shared.delete(key: "access_token")
+                let semaphore = DispatchSemaphore(value: 0)
+                var tokenResult: Result<Token, ApiError>?
+                
+                fetchAccessTokenRefresh(token: token) { result in
+                    tokenResult = result
+                    semaphore.signal()
+                }
+                semaphore.wait()
+                switch tokenResult {
+                case .failure(let error):
+                    throw error
+                case .success(let newToken):
+                    return newToken
+                case .none:
+                    throw ApiError.invalidToken
+                }
+            }
+            
+            return token
+        }
+        
+        func isAuthenticated() -> Bool {
+            return (try? getToken()) != nil
+        }
+        
+        private func getQueryStringParameter(url: String, param: String) -> String? {
+            guard let url = URLComponents(string: url) else { return nil }
+            return url.queryItems?.first(where: { $0.name == param })?.value
+          }
 
-//import SwiftyJSON
-//
-//class API42Class {
-//    var token: [String: Any]? = nil
-//    
-//    func generate_token() {
-//        var UID: String = ""
-//        var secret: String = ""
-//        
-//        if let _UID = ProcessInfo.processInfo.environment["API_UID"] {
-//            UID = String(_UID)
-//        } else {
-//            print("Missing environment variable: API_UID")
-//            exit(0)
-//        }
-//        if let _secret = ProcessInfo.processInfo.environment["API_SECRET"] {
-//            secret = String(_secret)
-//        } else {
-//            print("Missing environment variable: API_SECRET")
-//            exit(0)
-//        }
-//        
-//        let queryParams = "?"
-//            + "grant_type=client_credentials&"
-//            + "client_id=\(UID)&"
-//            + "client_secret=\(secret)"
-//        let url = URL(string: "https://api.intra.42.fr/oauth/token" + queryParams)!
-//        var httpRequest = URLRequest(url: url)
-//        httpRequest.httpMethod = "POST"
-//        httpRequest.setValue("application/x-www-form-urlencoded",
-//                             forHTTPHeaderField: "Content-Type")
-//        
-//        let semaphore = DispatchSemaphore(value: 0)
-//        let task = URLSession.shared.dataTask(with: httpRequest,
-//                    completionHandler: {(data, response, error) in
-//            if error != nil {
-//                print("Error: error generating 42api token")
-//                return
-//            }
-//            if let datas = data {
-//                do {
-//                    if let json = try JSONSerialization.jsonObject(
-//                        with: datas, options: .mutableContainers)
-//                        as? [String: Any] {
-//                            self.token = json
-//                            if let error = self.token?["error_description"] {
-//                                print("TOKEN ERROR: ")
-//                                print(error)
-//                                print("Maybe you should recreate new 42API app (https://profile.intra.42.fr/oauth/applications/new)")
-//                                print("Or maybe you should regenerate secret of existing app (https://profile.intra.42.fr/oauth/applications/12855)")
-//                                exit(0)
-//                            }
-//                            print("token generated")
-//                         }
-//                } catch let error {
-//                        print("Error: " + error.localizedDescription)
-//                }
-//            } else {
-//                print("Error: no datas returned when trying to generate 42api token")
-//                return
-//            }
-//            semaphore.signal()
-//        })
-//        task.resume()
-//        semaphore.wait()
-//    }
-//}
-//
-//let API42 = API42Class()
+        func handleCallback(url: URL) throws {
+            let urlString = url.absoluteString
+            guard let urlState = getQueryStringParameter(url: urlString, param: "state") else {
+                throw ApiError.invalidResponse
+            }
+            print("urlState", urlState)
+        
+            let state = try APIKeychain.shared.load(key: "oauth_state")
+            print("state", state)
+            
+            guard urlState == state else {
+                throw ApiError.invalidState
+            }
+            
+            guard let authorizationCode = getQueryStringParameter(url: urlString, param: "code")
+            else {
+                throw ApiError.invalidResponse
+            }
+            
+            try APIKeychain.shared.save(key: "authorization_code", data: authorizationCode, override: true)
+        }
+        
+        func makeRequest(url: URL, method: String, body: Data?, completion: @escaping (Result<Data, ApiError>) -> Void) {
+            var request = URLRequest(url: url)
+            request.httpMethod = method
+            
+            if let body = body {
+                request.httpBody = body
+                request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            }
+            
+            let token = try? getToken()
+            if token != nil {
+                request.setValue("Bearer \(token!.accessToken)", forHTTPHeaderField: "Authorization")
+            }
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print("Request error: \(error)")
+                    completion(.failure(.requestFailed))
+                    return
+                }
+                
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    completion(.failure(.invalidResponse))
+                    return
+                }
+                
+                guard let httpResponse = response as? HTTPURLResponse,
+                        (200...399).contains(httpResponse.statusCode)
+                else {
+                    print(httpResponse.statusCode)
+                    switch httpResponse.statusCode {
+                    case 404:
+                        completion(.failure(.notFound))
+                    case 401:
+                        self._onLogout()
+                        completion(.failure(.invalidToken))
+                    case 429:
+                        completion(.failure(.tooManyRequests))
+                    default:
+                        completion(.failure(.invalidResponse))
+                    }
+                    return
+                }
+                
+                guard let data = data else {
+                    completion(.failure(.requestFailed))
+                    return
+                }
+                completion(.success(data))
+            }
+            
+            task.resume()
+        }
+        
+        func fetchAccessTokenCode(completion: @escaping (Result<Token, ApiError>) -> Void) {
+            guard let authorizationCode = try? APIKeychain.shared.load(key: "authorization_code") else {
+                completion(.failure(.noCode))
+                return
+            }
+            
+            let bodyParameters = [
+                "grant_type": "authorization_code",
+                "client_id": OAuthConfig.consumerKey,
+                "client_secret": OAuthConfig.consumerSecret,
+                "code": authorizationCode,
+                "redirect_uri": OAuthConfig.callbackUrl
+            ]
+            
+            fetchAccessToken(bodyParameters) { result in
+                switch result {
+                case .success(let token): completion(.success(token))
+                case .failure(let error): completion(.failure(error))
+                }
+            }
+        }
+        
+        func fetchAccessTokenRefresh(token: Token, completion: @escaping (Result<Token, ApiError>) -> Void) {
+            let bodyParameters = [
+                "grant_type": "refresh_token",
+                "client_id": OAuthConfig.consumerKey,
+                "client_secret": OAuthConfig.consumerSecret,
+                "refresh_token": token.refreshToken ?? "",
+                "redirect_uri": OAuthConfig.callbackUrl
+            ]
+            
+            fetchAccessToken(bodyParameters) { result in
+                switch result {
+                case .success(let token): completion(.success(token))
+                case .failure(let error): completion(.failure(error))
+                }
+            }
+        }
+        
+        func fetchAccessToken(_ bodyParameters: [String:String], completion: @escaping (Result<Token, ApiError>) -> Void) {
+            guard let url = URL(string: OAuthConfig.accessTokenUrl) else {
+                completion(.failure(.invalidUrl))
+                return
+            }
+            
+            let bodyString = bodyParameters
+                .map { "\($0.key)=\($0.value)" }
+                .joined(separator: "&")
+            let bodyData = bodyString.data(using: .utf8)
+            
+            makeRequest(url: url, method: "POST", body: bodyData) { result in
+                switch result {
+                case .success(let data):
+                    do {
+                        let tokenResponse = try JSONDecoder().decode(Token.self, from: data)
+                        let jsonToken = String(data: try JSONEncoder().encode(tokenResponse), encoding: .utf8)!
+                        try APIKeychain.shared.save(key: "access_token", data: jsonToken, override: true)
+                        completion(.success(tokenResponse))
+                    } catch (let error) {
+                        completion(.failure(.unhandledError(error)))
+                        return
+                    }
+                case .failure(let error): completion(.failure(error))
+                }
+            }
+        }
+        
+        func fetchUser(_ login: String, completion: @escaping (Result<User, ApiError>) -> Void) {
+            let path = login == "me" ? "/me" : "/users/\(login)"
+            
+            guard let url = URL(string: "\(OAuthConfig.apiPrefix)/v2\(path)") else {
+                completion(.failure(.invalidUrl))
+                return
+            }
+            
+            makeRequest(url: url, method: "GET", body: nil) { result in
+                switch result {
+                case .success(let data):
+                    do {
+                        let user = try JSONDecoder().decode(User.self, from: data)
+                        completion(.success(user))
+                    } catch (let error) {
+                        completion(.failure(.unhandledError(error)))
+                        return
+                    }
+                case .failure(let error): completion(.failure(error))
+                }
+            }
+        }
+    }

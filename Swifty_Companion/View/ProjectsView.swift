@@ -9,17 +9,28 @@ import Foundation
 import SwiftUI
 
 struct ProjectsView: View {
-    let projects = ["Project 1", "Project 2", "Project 3", "Project 4", "Project 4", "Project 4", "Project 4", "Project 4", "Project 4"]
+    let projects: [ProjectUser]
     
     var body: some View {
-        List(projects, id: \.self) { project in
-            Text(project)
+        List(projects, id: \.project.id) { project in
+            VStack (alignment: .leading){
+                HStack {
+                    Text(project.status == "in_progress" ? "🟠" : project.validated == true ? "🟢" : "🔴")
+                        .padding()
+                    Text(project.project.name)
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                    Spacer()
+                    if project.finalMark != nil {
+                        Text("\(project.finalMark ?? 0)")
+                            .padding()
+                    }
+                }
+            }
         }
     }
 }
 
-struct ProjectsView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProjectsView()
-    }
+#Preview {
+    ProjectsView(projects : [defaultProject])
 }
